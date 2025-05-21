@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <color name="blueBlack">#111f28</color>
+    
+    <color name="lightBlue">#71C0BB</color>
+    <color name="lime">#E3EEB2</color>
+    <color name="deepSea">#332D56</color>
+    <color name="deepSeaLighter">#4E6688</color>
+    
+    <color name="offWhite">#F3F3E0</color>
+    <color name="blue">#27548A</color>
+    <color name="darkerBlue">#183B4E</color>
+    <color name="yellowText">#DDA853</color>
+</resources>
