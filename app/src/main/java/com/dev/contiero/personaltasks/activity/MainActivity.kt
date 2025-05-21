@@ -1,9 +1,13 @@
 package com.dev.contiero.personaltasks.activity
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -24,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         TaskRecycleViewAdapter(tasks)
     }
 
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -31,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         setContentView(mainBinding.root)
-        setSupportActionBar(mainBinding.toolbarIn.toolbar)
+        setSupportActionBar(mainBinding.includedToolBar.mainActivityToolBar)
 
         val task = Task(1,"Gustavo","Gomes Contiero")
         tasks.add(task)
@@ -41,12 +46,12 @@ class MainActivity : AppCompatActivity() {
         println(tasks)
 
 
-
-        ViewCompat.setOnApplyWindowInsetsListener(mainBinding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                println("Tudo certo no retorno")
+            }
         }
+
 
         mainBinding.taskRv.adapter = taskAdapter
         mainBinding.taskRv.layoutManager = LinearLayoutManager(this)
@@ -60,7 +65,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         println("CLICOOU")
+        if(item.itemId == R.id.insert_option){
+            resultLauncher.launch(Intent(this,CreateTaskActivity::class.java))
+            return true
+        }
         return true
+
     }
 }
 
