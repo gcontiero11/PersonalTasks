@@ -4,4 +4,5 @@
     <string name="task_title">Task Title</string>
     <string name="delete_icon">Removes the task</string>
     <string name="insert_option_title">Insert</string>
+    <string name="menu_description">Menu</string>
 </resources>

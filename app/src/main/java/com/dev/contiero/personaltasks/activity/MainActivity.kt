@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(mainBinding.root)
+        setSupportActionBar(mainBinding.toolbarIn.toolbar)
 
         val task = Task(1,"Gustavo","Gomes Contiero")
         tasks.add(task)
