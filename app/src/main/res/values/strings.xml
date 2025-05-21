@@ -6,4 +6,6 @@
     <string name="insert_option_title">Insert</string>
     <string name="menu_description">Menu</string>
     <string name="task_title_hint">Task Title</string>
+    <string name="create_task_submit_btn">Submit</string>
+    <string name="create_task_toolbar_title">New Task</string>
 </resources>
