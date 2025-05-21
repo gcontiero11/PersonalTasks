@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.contiero.personaltasks.R
 import com.dev.contiero.personaltasks.adapter.TaskRecycleViewAdapter
 import  com.dev.contiero.personaltasks.databinding.ActivityMainBinding
+import com.dev.contiero.personaltasks.model.Constant.TASK
 import com.dev.contiero.personaltasks.model.Task
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includedToolBar.mainActivityToolBar)
 
-        val task = Task(1,"Gustavo","Gomes Contiero")
+        val task = Task(1, "Gustavo", "Gomes Contiero")
         tasks.add(task)
         taskAdapter.notifyItemInserted(tasks.lastIndex)
         tasks.add(task)
@@ -46,11 +47,20 @@ class MainActivity : AppCompatActivity() {
         println(tasks)
 
 
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                println("Tudo certo no retorno")
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val receivedTask = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                        result.data?.getParcelableExtra(TASK, Task::class.java)
+                    else result.data?.getParcelableExtra(TASK)
+                    receivedTask?.let {
+                        println("Resultado aqui embaixo")
+                        println(receivedTask)
+                        tasks.add(receivedTask)
+                        taskAdapter.notifyItemInserted(tasks.lastIndex)
+                    }
+                }
             }
-        }
 
 
         mainBinding.taskRv.adapter = taskAdapter
@@ -59,14 +69,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.task_menu_context,menu)
+        menuInflater.inflate(R.menu.task_menu_context, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         println("CLICOOU")
-        if(item.itemId == R.id.insert_option){
-            resultLauncher.launch(Intent(this,CreateTaskActivity::class.java))
+        if (item.itemId == R.id.insert_option) {
+            resultLauncher.launch(Intent(this, CreateTaskActivity::class.java))
             return true
         }
         return true
