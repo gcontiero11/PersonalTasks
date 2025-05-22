@@ -25,10 +25,10 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     private val tasks: MutableList<Task> = mutableListOf()
 
     private val taskAdapter: TaskRecycleViewAdapter by lazy {
-        TaskRecycleViewAdapter(tasks,this)
+        TaskRecycleViewAdapter(tasks, this)
     }
 
-    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var activityHandler: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includedToolBar.mainActivityToolBar)
 
-        val task = Task(1,
+        val task = Task(
+            1,
             "Gustavo",
             "Gomes Contiero",
             LocalDateTime.now()
@@ -50,17 +51,22 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         println(tasks)
 
 
-        resultLauncher =
+        activityHandler =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
-                    val receivedTask = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    val receivedTask = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         result.data?.getParcelableExtra(TASK, Task::class.java)
-                    else result.data?.getParcelableExtra(TASK)
+                    } else result.data?.getParcelableExtra(TASK)
                     receivedTask?.let {
-                        println("Resultado aqui embaixo")
-                        println(receivedTask)
-                        tasks.add(receivedTask)
-                        taskAdapter.notifyItemInserted(tasks.lastIndex)
+                        val position = tasks.indexOfFirst { it.id == receivedTask.id }
+                        if (position == -1) {
+                            tasks.add(receivedTask)
+                            taskAdapter.notifyItemInserted(tasks.lastIndex)
+                        }
+                        else{
+                            tasks[position] = receivedTask
+                            taskAdapter.notifyItemChanged(position)
+                        }
                     }
                 }
             }
@@ -77,7 +83,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.insert_option) {
-            resultLauncher.launch(Intent(this, CreateTaskActivity::class.java))
+            activityHandler.launch(Intent(this, CreateTaskActivity::class.java))
             return true
         }
         return true
@@ -85,18 +91,22 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     override fun onTaskClick(position: Int) {
-        Intent(this,VisualizeTaskActivity::class.java).apply{
-            putExtra(TASK,tasks[position])
-            startActivity(this)
+        Intent(this, VisualizeTaskActivity::class.java).apply {
+            putExtra(TASK, tasks[position])
+            activityHandler.launch(this)
         }
     }
 
     override fun onRemoveTaskMenuItemClick(position: Int) {
-        TODO("Not yet implemented")
+        tasks.removeAt(position)
+        taskAdapter.notifyItemRemoved(position)
     }
 
-    override fun onEditContactTaskItemClick(position: Int) {
-        TODO("Not yet implemented")
+    override fun onEditTaskMenuItemClick(position: Int) {
+        Intent(this, CreateTaskActivity::class.java).apply {
+            putExtra(TASK, tasks[position])
+            activityHandler.launch(this)
+        }
     }
 }
 

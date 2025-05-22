@@ -6,5 +6,5 @@ sealed interface OnTaskClickListener {
     // Funções abstratas relacionadas ao menu de contexto. Poderiam estar numa interface separada e
     // mais específica.
     fun onRemoveTaskMenuItemClick(position: Int)
-    fun onEditContactTaskItemClick(position: Int)
+    fun onEditTaskMenuItemClick(position: Int)
 }

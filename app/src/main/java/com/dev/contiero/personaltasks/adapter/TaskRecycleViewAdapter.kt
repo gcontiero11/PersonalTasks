@@ -3,7 +3,9 @@ package com.dev.contiero.personaltasks.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.dev.contiero.personaltasks.R
 import com.dev.contiero.personaltasks.activity.OnTaskClickListener
 import com.dev.contiero.personaltasks.databinding.SimpleTaskBinding
 import com.dev.contiero.personaltasks.model.Task
@@ -43,6 +45,18 @@ class TaskRecycleViewAdapter(
         val rvTaskDate: TextView = simpleTaskBinding.taskDateTv
         val rvTaskTime: TextView = simpleTaskBinding.taskTimeTv
         init{
+            // Criando o menu de contexto para cada célula associada a um novo holder
+            simpleTaskBinding.root.setOnCreateContextMenuListener{ menu, v, menuInfo ->
+                (clickHandler as AppCompatActivity).menuInflater.inflate(R.menu.task_menu, menu)
+                menu.findItem(R.id.edit_option).setOnMenuItemClickListener {
+                    clickHandler.onEditTaskMenuItemClick(adapterPosition)
+                    true
+                }
+                menu.findItem(R.id.remove_option).setOnMenuItemClickListener {
+                    clickHandler.onRemoveTaskMenuItemClick(adapterPosition)
+                    true
+                }
+            }
             setClickListenerForEachTask(simpleTaskBinding)
         }
         private fun setClickListenerForEachTask(simpleTaskBinding: SimpleTaskBinding) {
