@@ -15,13 +15,9 @@ import com.dev.contiero.personaltasks.adapter.TaskRecycleViewAdapter
 import  com.dev.contiero.personaltasks.databinding.ActivityMainBinding
 import com.dev.contiero.personaltasks.model.Constant.TASK
 import com.dev.contiero.personaltasks.model.Task
-import java.time.Clock
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.temporal.TemporalAccessor
-import java.util.Date
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnTaskClickListener {
     private val mainBinding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
@@ -29,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val tasks: MutableList<Task> = mutableListOf()
 
     private val taskAdapter: TaskRecycleViewAdapter by lazy {
-        TaskRecycleViewAdapter(tasks)
+        TaskRecycleViewAdapter(tasks,this)
     }
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -69,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
         mainBinding.taskRv.adapter = taskAdapter
         mainBinding.taskRv.layoutManager = LinearLayoutManager(this)
         mainBinding.taskRv.setHasFixedSize(true)
@@ -81,13 +76,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        println("CLICOOU")
         if (item.itemId == R.id.insert_option) {
             resultLauncher.launch(Intent(this, CreateTaskActivity::class.java))
             return true
         }
         return true
 
+    }
+
+    override fun onTaskClick(position: Int) {
+        Intent(this,VisualizeTaskActivity::class.java).apply{
+            putExtra(TASK,tasks[position])
+            startActivity(this)
+        }
+    }
+
+    override fun onRemoveTaskMenuItemClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onEditContactTaskItemClick(position: Int) {
+        TODO("Not yet implemented")
     }
 }
 

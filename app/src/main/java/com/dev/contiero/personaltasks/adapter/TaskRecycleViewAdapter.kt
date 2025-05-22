@@ -4,12 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.dev.contiero.personaltasks.activity.OnTaskClickListener
 import com.dev.contiero.personaltasks.databinding.SimpleTaskBinding
 import com.dev.contiero.personaltasks.model.Task
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class TaskRecycleViewAdapter(private var tasks: MutableList<Task>):
+class TaskRecycleViewAdapter(
+    private var tasks: MutableList<Task>,
+    private val clickHandler: OnTaskClickListener
+):
     RecyclerView.Adapter<TaskRecycleViewAdapter.TaskAdapterViewHolder>() {
     private val dateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy", Locale.getDefault())
     private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
@@ -38,5 +42,11 @@ class TaskRecycleViewAdapter(private var tasks: MutableList<Task>):
         val rvTaskTitle: TextView = simpleTaskBinding.taskTitle
         val rvTaskDate: TextView = simpleTaskBinding.taskDateTv
         val rvTaskTime: TextView = simpleTaskBinding.taskTimeTv
+        init{
+            setClickListenerForEachTask(simpleTaskBinding)
+        }
+        private fun setClickListenerForEachTask(simpleTaskBinding: SimpleTaskBinding) {
+                simpleTaskBinding.root.setOnClickListener { clickHandler.onTaskClick(adapterPosition) }
+        }
     }
 }
