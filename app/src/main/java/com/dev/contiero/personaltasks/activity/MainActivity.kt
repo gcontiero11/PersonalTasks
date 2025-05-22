@@ -9,14 +9,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.contiero.personaltasks.R
 import com.dev.contiero.personaltasks.adapter.TaskRecycleViewAdapter
 import  com.dev.contiero.personaltasks.databinding.ActivityMainBinding
 import com.dev.contiero.personaltasks.model.Constant.TASK
 import com.dev.contiero.personaltasks.model.Task
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.temporal.TemporalAccessor
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     private val mainBinding: ActivityMainBinding by lazy {
@@ -39,7 +42,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includedToolBar.mainActivityToolBar)
 
-        val task = Task(1, "Gustavo", "Gomes Contiero")
+        val task = Task(1,
+            "Gustavo",
+            "Gomes Contiero",
+            LocalDateTime.now()
+        )
         tasks.add(task)
         taskAdapter.notifyItemInserted(tasks.lastIndex)
         tasks.add(task)
@@ -69,7 +76,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.task_menu_context, menu)
+        menuInflater.inflate(R.menu.main_activity_toolbar_menu_context, menu)
         return true
     }
 
