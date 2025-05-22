@@ -8,4 +8,10 @@
     <string name="task_title_hint">Task Title</string>
     <string name="create_task_submit_btn">Submit</string>
     <string name="create_task_toolbar_title">New Task</string>
+    <string name="edit_option_title">edit</string>
+    <string name="delete_option_title">delete</string>
+    <string name="task_description_hint">Description</string>
+    <string name="create_task_cancel_btn">cancel</string>
+    <string name="text_example_date_tv">05-22-2025</string>
+    <string name="text_example_time_tv">12:54</string>
 </resources>
