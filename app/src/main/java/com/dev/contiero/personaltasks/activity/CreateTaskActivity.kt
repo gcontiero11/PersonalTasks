@@ -74,9 +74,9 @@ class CreateTaskActivity : AppCompatActivity() {
             }
             taskDateEt.setText(
                 dateFormatter.format(
-                    LocalDateTime.now().plusDays(1)
+                    LocalDateTime.now()
                 )
-            ) // deixa o valor inicial do campo para o dia seguinte
+            )
             taskTimeEt.setText(
                 timeFormatter.format(
                     LocalDateTime.now().plusHours(1)
