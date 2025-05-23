@@ -5,6 +5,12 @@ Este aplicativo Android, desenvolvido em Kotlin, oferece uma forma prática e in
 
 ---
 
+## Execução
+   https://youtu.be/y5eBqp8OUac
+   
+---
+
+
 ## Funcionalidades
 
 1. **Inserir Tarefa**
@@ -75,6 +81,13 @@ Este aplicativo Android, desenvolvido em Kotlin, oferece uma forma prática e in
 
 **Simple Task Manager (Android)**
 This Android app, built in Kotlin, provides a practical and intuitive way to manage your daily tasks. Supporting a minimum API level of 26 (Android Oreo), it allows you to efficiently create, edit, view, and delete activities.
+
+---
+
+## Execução
+   https://youtu.be/y5eBqp8OUac
+   
+---
 
 ## Features
 
