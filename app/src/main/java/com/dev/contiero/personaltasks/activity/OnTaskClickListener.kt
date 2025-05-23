@@ -7,4 +7,5 @@ sealed interface OnTaskClickListener {
     // mais específica.
     fun onRemoveTaskMenuItemClick(position: Int)
     fun onEditTaskMenuItemClick(position: Int)
+    fun onCheckBoxClick(position: Int)
 }

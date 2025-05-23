@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.contiero.personaltasks.R
 import com.dev.contiero.personaltasks.adapter.TaskRecycleViewAdapter
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val tasks: MutableList<Task> = mutableListOf()
+    private var tasks: MutableList<Task> = mutableListOf()
 
     private val taskAdapter: TaskRecycleViewAdapter by lazy {
         TaskRecycleViewAdapter(tasks, this)
@@ -38,15 +39,23 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includedToolBar.mainActivityToolBar)
 
-        val task = Task(
+        val task1 = Task(
             1,
             "Gustavo",
             "Gomes Contiero",
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            false
         )
-        tasks.add(task)
+        val task2 = Task(
+            2,
+            "Gustavo",
+            "Gomes Contiero",
+            LocalDateTime.now(),
+            false
+        )
+        tasks.add(task1)
         taskAdapter.notifyItemInserted(tasks.lastIndex)
-        tasks.add(task)
+        tasks.add(task2)
         taskAdapter.notifyItemInserted(tasks.lastIndex)
         println(tasks)
 
@@ -86,6 +95,12 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
             activityHandler.launch(Intent(this, CreateTaskActivity::class.java))
             return true
         }
+        if (item.itemId == R.id.delete_all_checked_option) {
+            tasks.removeAll{it.done}
+            println(tasks)
+            taskAdapter.notifyDataSetChanged()
+            return true
+        }
         return true
 
     }
@@ -107,6 +122,11 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
             putExtra(TASK, tasks[position])
             activityHandler.launch(this)
         }
+    }
+
+    override fun onCheckBoxClick(position: Int) {
+        tasks[position].done = !tasks[position].done
+        println(tasks)
     }
 }
 

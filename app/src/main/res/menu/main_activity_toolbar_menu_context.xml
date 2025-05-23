@@ -7,4 +7,10 @@
         app:showAsAction="never">
 
     </item>
+    <item
+        android:id="@+id/delete_all_checked_option"
+        android:title="@string/delete_checked_option_title"
+        app:showAsAction="never">
+
+    </item>
 </menu>

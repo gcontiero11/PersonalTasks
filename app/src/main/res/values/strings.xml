@@ -14,4 +14,5 @@
     <string name="create_task_cancel_btn">cancel</string>
     <string name="text_example_date_tv">05-22-2025</string>
     <string name="text_example_time_tv">12:54</string>
+    <string name="delete_checked_option_title">delete all checked</string>
 </resources>

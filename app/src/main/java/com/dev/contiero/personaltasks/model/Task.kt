@@ -7,7 +7,8 @@ import java.time.LocalDateTime
 @Parcelize
 data class Task(
     val id: Int,
-    val title: String,
-    val description: String,
-    val dateTime: LocalDateTime,
+    var title: String,
+    var description: String,
+    var dateTime: LocalDateTime,
+    var done: Boolean
 ) :Parcelable

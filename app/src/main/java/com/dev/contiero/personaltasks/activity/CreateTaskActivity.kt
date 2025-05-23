@@ -60,7 +60,8 @@ class CreateTaskActivity : AppCompatActivity() {
                     receivedTask?.id ?: hashCode(),
                     taskTitleEt.text.toString().trim(),
                     taskDescriptionEt.text.toString().trim(),
-                    dateTime
+                    dateTime,
+                    false
                 ).let { contact ->
                     Intent().apply {
                         putExtra(TASK, contact)

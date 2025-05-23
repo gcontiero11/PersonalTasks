@@ -2,6 +2,7 @@ package com.dev.contiero.personaltasks.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +37,7 @@ class TaskRecycleViewAdapter(
             holder.rvTaskTitle.text =  task.title
             holder.rvTaskDate.text = task.dateTime.toLocalDate().format(dateFormatter)
             holder.rvTaskTime.text = task.dateTime.toLocalTime().format(timeFormatter)
+            holder.rvCheckBox.isChecked = task.done
         }
     }
 
@@ -44,6 +46,7 @@ class TaskRecycleViewAdapter(
         val rvTaskTitle: TextView = simpleTaskBinding.taskTitle
         val rvTaskDate: TextView = simpleTaskBinding.taskDateTv
         val rvTaskTime: TextView = simpleTaskBinding.taskTimeTv
+        val rvCheckBox: CheckBox = simpleTaskBinding.itemCheckbox
         init{
             // Criando o menu de contexto para cada célula associada a um novo holder
             simpleTaskBinding.root.setOnCreateContextMenuListener{ menu, v, menuInfo ->
@@ -58,9 +61,17 @@ class TaskRecycleViewAdapter(
                 }
             }
             setClickListenerForEachTask(simpleTaskBinding)
+            setCheckBoxClickListenerForEachTask(simpleTaskBinding)
         }
         private fun setClickListenerForEachTask(simpleTaskBinding: SimpleTaskBinding) {
                 simpleTaskBinding.root.setOnClickListener { clickHandler.onTaskClick(adapterPosition) }
+        }
+        private fun setCheckBoxClickListenerForEachTask(simpleTaskBinding: SimpleTaskBinding){
+            simpleTaskBinding.itemCheckbox.setOnClickListener {
+                println("Clicou no CHECK BOX")
+                clickHandler.onCheckBoxClick(adapterPosition)
+            }
+
         }
     }
 }
