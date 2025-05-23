@@ -9,17 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dev.contiero.personaltasks.R
 import com.dev.contiero.personaltasks.activity.OnTaskClickListener
 import com.dev.contiero.personaltasks.databinding.SimpleTaskBinding
+import com.dev.contiero.personaltasks.utils.DateTimeConverter
 import com.dev.contiero.personaltasks.model.Task
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class TaskRecycleViewAdapter(
     private var tasks: MutableList<Task>,
     private val clickHandler: OnTaskClickListener
 ):
     RecyclerView.Adapter<TaskRecycleViewAdapter.TaskAdapterViewHolder>() {
-    private val dateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy", Locale.getDefault())
-    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
+    private val converter = DateTimeConverter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskAdapterViewHolder =
         TaskAdapterViewHolder(
@@ -35,9 +33,9 @@ class TaskRecycleViewAdapter(
     override fun onBindViewHolder(holder: TaskAdapterViewHolder, position: Int) {
         tasks[position].let{ task ->
             holder.rvTaskTitle.text =  task.title
-            holder.rvTaskDate.text = task.dateTime.toLocalDate().format(dateFormatter)
-            holder.rvTaskTime.text = task.dateTime.toLocalTime().format(timeFormatter)
-            holder.rvCheckBox.isChecked = task.done
+            holder.rvTaskDate.text = task.dateTime.toLocalDate().format(converter.dateFormatter)
+            holder.rvTaskTime.text = task.dateTime.toLocalTime().format(converter.timeFormatter)
+            holder.rvCheckBox.isChecked = task.isDone
         }
     }
 

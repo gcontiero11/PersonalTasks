@@ -5,14 +5,15 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.contiero.personaltasks.R
 import com.dev.contiero.personaltasks.adapter.TaskRecycleViewAdapter
+import com.dev.contiero.personaltasks.controller.TaskController
 import  com.dev.contiero.personaltasks.databinding.ActivityMainBinding
 import com.dev.contiero.personaltasks.model.Constant.TASK
 import com.dev.contiero.personaltasks.model.Task
@@ -29,12 +30,18 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         TaskRecycleViewAdapter(tasks, this)
     }
 
+    private val taskController: TaskController by lazy {
+        TaskController(this)
+    }
+
     private lateinit var activityHandler: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+//        taskController.deleteAll()
 
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includedToolBar.mainActivityToolBar)
@@ -59,6 +66,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         taskAdapter.notifyItemInserted(tasks.lastIndex)
         println(tasks)
 
+        fillContactList()
 
         activityHandler =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -71,10 +79,12 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
                         if (position == -1) {
                             tasks.add(receivedTask)
                             taskAdapter.notifyItemInserted(tasks.lastIndex)
+                            taskController.insertTask(receivedTask)
                         }
                         else{
                             tasks[position] = receivedTask
                             taskAdapter.notifyItemChanged(position)
+                            taskController.modifyTask(receivedTask)
                         }
                     }
                 }
@@ -96,7 +106,11 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
             return true
         }
         if (item.itemId == R.id.delete_all_checked_option) {
-            tasks.removeAll{it.done}
+            for(task in tasks){
+                if(task.isDone)
+                    taskController.removeTask(task.id!!)
+            }
+            tasks.removeAll{it.isDone}
             println(tasks)
             taskAdapter.notifyDataSetChanged()
             return true
@@ -113,8 +127,10 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     override fun onRemoveTaskMenuItemClick(position: Int) {
+        taskController.removeTask(tasks[position].id!!)
         tasks.removeAt(position)
         taskAdapter.notifyItemRemoved(position)
+        Toast.makeText(this, "Contact removed!", Toast.LENGTH_SHORT).show()
     }
 
     override fun onEditTaskMenuItemClick(position: Int) {
@@ -125,8 +141,16 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     override fun onCheckBoxClick(position: Int) {
-        tasks[position].done = !tasks[position].done
+        tasks[position].isDone = !tasks[position].isDone
         println(tasks)
+    }
+
+    private fun fillContactList() {
+        tasks.clear()
+        Thread {
+            tasks.addAll(taskController.getTasks())
+            taskAdapter.notifyDataSetChanged()
+        }.start()
     }
 }
 

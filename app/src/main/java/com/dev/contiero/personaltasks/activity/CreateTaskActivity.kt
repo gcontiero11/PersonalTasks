@@ -10,13 +10,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.dev.contiero.personaltasks.databinding.ActivityCreateTaskBinding
 import com.dev.contiero.personaltasks.model.Constant.TASK
+import com.dev.contiero.personaltasks.utils.DateTimeConverter
 import com.dev.contiero.personaltasks.model.Task
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class CreateTaskActivity : AppCompatActivity() {
     private val createTaskBinding: ActivityCreateTaskBinding by lazy {
@@ -24,8 +23,7 @@ class CreateTaskActivity : AppCompatActivity() {
     }
 
     private val calendar = Calendar.getInstance()
-    private val dateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy", Locale.getDefault())
-    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
+    private val converter = DateTimeConverter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +50,12 @@ class CreateTaskActivity : AppCompatActivity() {
         with(createTaskBinding) {
             submitBtn.setOnClickListener {
                 val dateTime = LocalDateTime.of(
-                    LocalDate.parse(taskDateEt.text.toString(),dateFormatter),
-                    LocalTime.parse(taskTimeEt.text.toString(), timeFormatter)
+                    LocalDate.parse(taskDateEt.text.toString(),converter.dateFormatter),
+                    LocalTime.parse(taskTimeEt.text.toString(), converter.timeFormatter)
                 )
 
                 Task(
-                    receivedTask?.id ?: hashCode(),
+                    receivedTask?.id?: hashCode(),
                     taskTitleEt.text.toString().trim(),
                     taskDescriptionEt.text.toString().trim(),
                     dateTime,
@@ -74,12 +72,12 @@ class CreateTaskActivity : AppCompatActivity() {
                 finish()
             }
             taskDateEt.setText(
-                dateFormatter.format(
+                converter.dateFormatter.format(
                     LocalDateTime.now()
                 )
             )
             taskTimeEt.setText(
-                timeFormatter.format(
+                converter.timeFormatter.format(
                     LocalDateTime.now().plusHours(1)
                 )
             ) // deixa o valor inicial do campo para daqui uma hora
@@ -95,7 +93,7 @@ class CreateTaskActivity : AppCompatActivity() {
                         LocalDateTime.ofInstant(
                             calendar.time.toInstant(),
                             ZoneId.systemDefault()
-                        ).format(dateFormatter)
+                        ).format(converter.dateFormatter)
                     )
                 }
 
@@ -117,7 +115,7 @@ class CreateTaskActivity : AppCompatActivity() {
                     LocalDateTime.ofInstant(
                         calendar.time.toInstant(),
                         ZoneId.systemDefault()
-                    ).format(timeFormatter)
+                    ).format(converter.timeFormatter)
                 )
             }
 
