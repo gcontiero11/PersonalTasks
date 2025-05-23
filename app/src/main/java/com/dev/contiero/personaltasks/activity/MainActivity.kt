@@ -46,26 +46,6 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includedToolBar.mainActivityToolBar)
 
-        val task1 = Task(
-            1,
-            "Gustavo",
-            "Gomes Contiero",
-            LocalDateTime.now(),
-            false
-        )
-        val task2 = Task(
-            2,
-            "Gustavo",
-            "Gomes Contiero",
-            LocalDateTime.now(),
-            false
-        )
-        tasks.add(task1)
-        taskAdapter.notifyItemInserted(tasks.lastIndex)
-        tasks.add(task2)
-        taskAdapter.notifyItemInserted(tasks.lastIndex)
-        println(tasks)
-
         fillContactList()
 
         activityHandler =
