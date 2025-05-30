@@ -143,3 +143,5 @@ This Android app, built in Kotlin, provides a practical and intuitive way to man
 * Kotlin
 * Android SDK (min API 26)
 * AndroidX Libraries
+
+teste commit
